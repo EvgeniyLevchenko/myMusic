@@ -103,7 +103,6 @@ class MainTabBarController: UITabBarController {
 // MARK: - MainTabBarController Delegate
 extension MainTabBarController: MainTabBarControllerDelegate {
     func minimizeTrackDetailsView() {
-        print("minimize")
         maximizedTopAnchorConstraint.isActive = false
         bottomAnchorConstraint.constant = view.frame.height
         minimizedTopAnchorConstraint.isActive = true
@@ -115,6 +114,7 @@ extension MainTabBarController: MainTabBarControllerDelegate {
             initialSpringVelocity: 1) {
                 self.view.layoutIfNeeded()
                 self.tabBar.alpha = 1
+                self.trackDetailView.showMiniPlayer()
             }
     }
     
@@ -131,6 +131,7 @@ extension MainTabBarController: MainTabBarControllerDelegate {
             initialSpringVelocity: 1) {
                 self.view.layoutIfNeeded()
                 self.tabBar.alpha = 0
+                self.trackDetailView.hideMiniPlayer()
             }
         
         guard let viewModel = viewModel else { return }
