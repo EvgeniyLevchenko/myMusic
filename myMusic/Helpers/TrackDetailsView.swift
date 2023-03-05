@@ -13,6 +13,7 @@ class TrackDetailsView: UIView {
     
     // MARK: - UI Elements
     
+    private let miniPlayerView = MiniPlayerView()
     private let dragDownButton = UIButton(
         title: "",
         titleColor: .systemGray,
@@ -23,7 +24,8 @@ class TrackDetailsView: UIView {
     private let coverImageView = UIImageView(
         image: UIImage(systemName: "music.note"),
         cornerRadius: 5.0,
-        isShadow: true)
+        isShadow: true
+    )
     private let currentTimeSlider = UISlider(value: 0.0)
     private let currentTimeLabel = UILabel(
         text: "00:00",
@@ -89,6 +91,14 @@ class TrackDetailsView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func showMiniPlayer() {
+        miniPlayerView.isHidden = false
+    }
+    
+    func hideMiniPlayer() {
+        miniPlayerView.isHidden = true
+    }
 }
 
 // MARK: - Setup View
@@ -96,10 +106,15 @@ extension TrackDetailsView {
     private func setupView() {
         addButtonsTargets()
         transformCoverImageView()
+        setMiniViewPlayerDelegate()
+        hideMiniPlayer()
+        addGestures()
     }
     
     func set(viewModel: SearchViewModel.Cell) {
         transformCoverImageView()
+        miniPlayerView.set(viewModel: viewModel)
+        miniPlayerView.setState(playerState: player.timeControlStatus)
         trackTitleLabel.text = viewModel.trackName
         artistNameLabel.text = viewModel.artistName
         playPauseButton.setImage(UIImage(named: "pause"), for: .normal)
@@ -109,6 +124,11 @@ extension TrackDetailsView {
         let string600 = viewModel.iconUrlString?.replacingOccurrences(of: "100x100", with: "600x600")
         guard let url = URL(string: string600 ?? "") else { return }
         coverImageView.sd_setImage(with: url)
+    }
+    
+    private func addGestures() {
+        miniPlayerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapMaximized)))
+        miniPlayerView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan)))
     }
     
     private func playTrack(previewUrl: String?) {
@@ -125,6 +145,45 @@ extension TrackDetailsView {
         playPauseButton.addTarget(self, action: #selector(playPauseAction), for: .touchUpInside)
         nextTrackButton.addTarget(self, action: #selector(playNextTrack), for: .touchUpInside)
         volumeSlider.addTarget(self, action: #selector(handleVolumeSlider), for: .touchUpInside)
+    }
+    
+    private func setMiniViewPlayerDelegate() {
+        miniPlayerView.delegate = self
+    }
+}
+
+// MARK: - Gestures
+extension TrackDetailsView {
+    @objc private func handleTapMaximized() {
+        tabBarDelegate?.maximizeTrackDetailsView(viewModel: nil)
+    }
+    
+    @objc private func handlePan(gesture: UIPanGestureRecognizer) {
+        switch gesture.state {
+        case .began:
+            print("began")
+            break
+        case .changed:
+            handlePanChanged(gesture: gesture)
+        case .ended:
+            print("ended")
+            break
+        case .possible:
+            print("possible")
+            break
+        case .cancelled:
+            print("cancelled")
+            break
+        case .failed:
+            print("failed")
+            break
+        @unknown default:
+            break
+        }
+    }
+    
+    private func handlePanChanged(gesture: UIPanGestureRecognizer) {
+
     }
 }
 
@@ -200,8 +259,8 @@ extension TrackDetailsView {
     }
     
     @objc private func dragDownButtonTapped() {
+        miniPlayerView.setState(playerState: player.timeControlStatus)
         self.tabBarDelegate?.minimizeTrackDetailsView()
-//        self.removeFromSuperview()
     }
     
     @objc private func playPreviousTrack() {
@@ -238,9 +297,30 @@ extension TrackDetailsView {
     }
 }
 
+// MARK: - Mini Player Delegate
+extension TrackDetailsView: MiniPlayerDelegate {
+    func playPauseTrack() {
+        playPauseAction()
+    }
+    
+    func nextTrack() {
+        playNextTrack()
+    }
+}
+
 // MARK: - Setup Layout
 extension TrackDetailsView {
     private func setupLayout() {
+        
+        miniPlayerView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(miniPlayerView)
+        NSLayoutConstraint.activate([
+            miniPlayerView.topAnchor.constraint(equalTo: self.topAnchor),
+            miniPlayerView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            miniPlayerView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            miniPlayerView.heightAnchor.constraint(equalToConstant: 64.0)
+        ])
+        
         let timeStackView = UIStackView(arrangedSubviews: [currentTimeLabel, durationLabel], axis: .horizontal, distribution: .fillEqually)
         let durationStackView = UIStackView(arrangedSubviews: [currentTimeSlider, timeStackView], axis: .vertical)
         let infoStackView = UIStackView(arrangedSubviews: [trackTitleLabel, artistNameLabel], axis: .vertical, alignment: .center)
@@ -269,7 +349,7 @@ extension TrackDetailsView {
         ])
         
         NSLayoutConstraint.activate([
-            mainStackView.topAnchor.constraint(equalTo: topAnchor, constant: 60),
+            mainStackView.topAnchor.constraint(equalTo: topAnchor, constant: 64),
             mainStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30),
             mainStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30),
             mainStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -70)

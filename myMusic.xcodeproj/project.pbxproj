@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		4B19FE4029AE1EC700DDE281 /* ViewControllerBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B19FE3F29AE1EC700DDE281 /* ViewControllerBuilder.swift */; };
 		4B19FE5129AE368000DDE281 /* SearchViewControllerBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B19FE5029AE368000DDE281 /* SearchViewControllerBuilder.swift */; };
+		4B31316729B4E10600F72F42 /* MiniPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B31316629B4E10600F72F42 /* MiniPlayerView.swift */; };
+		4B31316929B4E92300F72F42 /* MiniPlayerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B31316829B4E92300F72F42 /* MiniPlayerDelegate.swift */; };
 		4B38CE7929A2752D0073D424 /* SearchHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B38CE7829A2752D0073D424 /* SearchHeader.swift */; };
 		4B78A26A29A1012B007DE4F5 /* UIImageView + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B78A26929A1012B007DE4F5 /* UIImageView + Extension.swift */; };
 		4B78A26C29A1013C007DE4F5 /* UILabel + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B78A26B29A1013C007DE4F5 /* UILabel + Extension.swift */; };
@@ -45,6 +47,8 @@
 /* Begin PBXFileReference section */
 		4B19FE3F29AE1EC700DDE281 /* ViewControllerBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerBuilder.swift; sourceTree = "<group>"; };
 		4B19FE5029AE368000DDE281 /* SearchViewControllerBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewControllerBuilder.swift; sourceTree = "<group>"; };
+		4B31316629B4E10600F72F42 /* MiniPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniPlayerView.swift; sourceTree = "<group>"; };
+		4B31316829B4E92300F72F42 /* MiniPlayerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniPlayerDelegate.swift; sourceTree = "<group>"; };
 		4B38CE7829A2752D0073D424 /* SearchHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHeader.swift; sourceTree = "<group>"; };
 		4B78A26929A1012B007DE4F5 /* UIImageView + Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImageView + Extension.swift"; sourceTree = "<group>"; };
 		4B78A26B29A1013C007DE4F5 /* UILabel + Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UILabel + Extension.swift"; sourceTree = "<group>"; };
@@ -128,12 +132,12 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		4BC35D4429A2474700140545 /* MainTabBar */ = {
+		4BC35D4429A2474700140545 /* Main */ = {
 			isa = PBXGroup;
 			children = (
 				4BFCCE97299A4D88009FC3F6 /* MainTabBarController.swift */,
 			);
-			path = MainTabBar;
+			path = Main;
 			sourceTree = "<group>";
 		};
 		4BC35D4529A2475D00140545 /* Sources */ = {
@@ -159,6 +163,7 @@
 		4BD45752299AD6D400C9DFFC /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				4B31316629B4E10600F72F42 /* MiniPlayerView.swift */,
 				4BB5165229A396B9006FFB1E /* TrackDetailsView.swift */,
 				4B19FE5029AE368000DDE281 /* SearchViewControllerBuilder.swift */,
 			);
@@ -181,7 +186,7 @@
 		4BD45764299AE93000C9DFFC /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
-				4BC35D4429A2474700140545 /* MainTabBar */,
+				4BC35D4429A2474700140545 /* Main */,
 				4BD45755299AE85000C9DFFC /* Search */,
 			);
 			path = Scenes;
@@ -212,6 +217,7 @@
 				4BC35D4629A2497D00140545 /* TrackCellViewModel.swift */,
 				4BFB630A29A6735200454C67 /* TracksNavigationDelegate.swift */,
 				4B19FE3F29AE1EC700DDE281 /* ViewControllerBuilder.swift */,
+				4B31316829B4E92300F72F42 /* MiniPlayerDelegate.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -411,6 +417,7 @@
 				4BD4576C299AE94000C9DFFC /* SearchPresenter.swift in Sources */,
 				4BC0CFED29A6316B00618880 /* CMTime + Extension.swift in Sources */,
 				4BFCCE84299A4D37009FC3F6 /* AppDelegate.swift in Sources */,
+				4B31316929B4E92300F72F42 /* MiniPlayerDelegate.swift in Sources */,
 				4BD4574E299AC85700C9DFFC /* Track.swift in Sources */,
 				4B78A26C29A1013C007DE4F5 /* UILabel + Extension.swift in Sources */,
 				4BD4576F299AE94000C9DFFC /* SearchModels.swift in Sources */,
@@ -423,6 +430,7 @@
 				4BFB630B29A6735200454C67 /* TracksNavigationDelegate.swift in Sources */,
 				4BC35D4729A2497D00140545 /* TrackCellViewModel.swift in Sources */,
 				4BFCCE9E299A5461009FC3F6 /* UIColor + Extension.swift in Sources */,
+				4B31316729B4E10600F72F42 /* MiniPlayerView.swift in Sources */,
 				4BD4574C299AC83400C9DFFC /* SearchResponse.swift in Sources */,
 				4B78A27029A1016E007DE4F5 /* UIStackView + Extension.swift in Sources */,
 				4B78A26E29A10151007DE4F5 /* UIButton + Extension.swift in Sources */,

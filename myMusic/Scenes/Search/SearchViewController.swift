@@ -82,7 +82,14 @@ extension SearchViewController {
     /// - Tag: List
     private func createLayout() -> UICollectionViewLayout {
         let config = UICollectionLayoutListConfiguration(appearance: .plain)
-        return UICollectionViewCompositionalLayout.list(using: config)
+        let layout = UICollectionViewCompositionalLayout.list(using: config)
+        
+        return layout
+    }
+    
+    private func raiseCollectionView() {
+        let bottomInset = 64.0
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: bottomInset, right: 0)
     }
 }
 
@@ -112,6 +119,7 @@ extension SearchViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let items = dataSource.snapshot().itemIdentifiers(inSection: .main)
         tabBarDelegate?.maximizeTrackDetailsView(viewModel: items[indexPath.row])
+        raiseCollectionView()
         lastSelectedCellIndexPath = indexPath
         collectionView.deselectItem(at: indexPath, animated: true)
     }
