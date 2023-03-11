@@ -44,7 +44,6 @@
 		4BFCCE8D299A4D38009FC3F6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4BFCCE8C299A4D38009FC3F6 /* Assets.xcassets */; };
 		4BFCCE90299A4D38009FC3F6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4BFCCE8E299A4D38009FC3F6 /* LaunchScreen.storyboard */; };
 		4BFCCE98299A4D88009FC3F6 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFCCE97299A4D88009FC3F6 /* MainTabBarController.swift */; };
-		4BFCCE9A299A4E31009FC3F6 /* SearchMusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFCCE99299A4E31009FC3F6 /* SearchMusicViewController.swift */; };
 		4BFCCE9E299A5461009FC3F6 /* UIColor + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BFCCE9D299A5461009FC3F6 /* UIColor + Extension.swift */; };
 		AE5F771DBC43335CFE6CAE9C /* Pods_myMusic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8BA4952E32EB78D53D28E30 /* Pods_myMusic.framework */; };
 /* End PBXBuildFile section */
@@ -89,7 +88,6 @@
 		4BFCCE8F299A4D38009FC3F6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4BFCCE91299A4D38009FC3F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4BFCCE97299A4D88009FC3F6 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
-		4BFCCE99299A4E31009FC3F6 /* SearchMusicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchMusicViewController.swift; sourceTree = "<group>"; };
 		4BFCCE9D299A5461009FC3F6 /* UIColor + Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor + Extension.swift"; sourceTree = "<group>"; };
 		606181429B44D21DF1C38361 /* Pods-myMusic.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myMusic.debug.xcconfig"; path = "Target Support Files/Pods-myMusic/Pods-myMusic.debug.xcconfig"; sourceTree = "<group>"; };
 		C951A9E57508DEF931A412C2 /* Pods-myMusic.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-myMusic.release.xcconfig"; path = "Target Support Files/Pods-myMusic/Pods-myMusic.release.xcconfig"; sourceTree = "<group>"; };
@@ -153,7 +151,6 @@
 		4BC35D4529A2475D00140545 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				4BFCCE99299A4E31009FC3F6 /* SearchMusicViewController.swift */,
 				4BFCCE8C299A4D38009FC3F6 /* Assets.xcassets */,
 				4BFCCE8E299A4D38009FC3F6 /* LaunchScreen.storyboard */,
 				4BFCCE91299A4D38009FC3F6 /* Info.plist */,
@@ -435,7 +432,6 @@
 				4B78A27229A1018B007DE4F5 /* UIFont + Extension.swift in Sources */,
 				4B78A26A29A1012B007DE4F5 /* UIImageView + Extension.swift in Sources */,
 				4BD4576E299AE94000C9DFFC /* SearchRouter.swift in Sources */,
-				4BFCCE9A299A4E31009FC3F6 /* SearchMusicViewController.swift in Sources */,
 				4BD4576C299AE94000C9DFFC /* SearchPresenter.swift in Sources */,
 				4BC0CFED29A6316B00618880 /* CMTime + Extension.swift in Sources */,
 				4BC8FA9429BCB9C100B1E91B /* LibraryPresenter.swift in Sources */,
