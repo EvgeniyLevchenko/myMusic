@@ -18,9 +18,6 @@ class LibraryInteractor: LibraryBusinessLogic {
     var service: LibraryService?
     
     func makeRequest(request: Library.Model.Request.RequestType) {
-        if service == nil {
-            service = LibraryService()
-        }
+        
     }
-    
 }
