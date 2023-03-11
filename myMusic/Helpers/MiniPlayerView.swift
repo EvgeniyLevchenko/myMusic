@@ -34,6 +34,8 @@ class MiniPlayerView: UIView {
         backgroundColor: .mainWhite()
     )
     
+    private var playerState = AVPlayer.TimeControlStatus.paused
+    
     weak var delegate: MiniPlayerDelegate?
     
     override init(frame: CGRect) {
@@ -64,9 +66,11 @@ extension MiniPlayerView {
     func setState(playerState: AVPlayer.TimeControlStatus) {
         switch playerState {
         case .paused:
+            self.playerState = .paused
             let playImage = UIImage(named: "play")
             playPauseButton.setImage(playImage, for: .normal)
         case .playing:
+            self.playerState = .playing
             let pauseImage = UIImage(named: "pause")
             playPauseButton.setImage(pauseImage, for: .normal)
         case .waitingToPlayAtSpecifiedRate:
@@ -89,17 +93,24 @@ extension MiniPlayerView {
 // MARK: - Controls Actions
 extension MiniPlayerView {
     @objc private func playPauseAction() {
-        let pauseImage = UIImage(named: "pause")
-        let playImage = UIImage(named: "play")
-        if playPauseButton.currentImage == pauseImage {
-            playPauseButton.setImage(playImage, for: .normal)
-        } else {
-            playPauseButton.setImage(pauseImage, for: .normal)
+        switch playerState {
+        case .paused:
+            playerState = .playing
+            setState(playerState: playerState)
+        case .playing:
+            playerState = .paused
+            setState(playerState: playerState)
+        case .waitingToPlayAtSpecifiedRate:
+            break
+        @unknown default:
+            break
         }
         delegate?.playPauseTrack()
     }
     
     @objc private func playNextTrack() {
+        playerState = .playing
+        setState(playerState: playerState)
         delegate?.nextTrack()
     }
 }
