@@ -101,6 +101,14 @@ class TrackDetailsView: UIView {
     func hideMiniPlayer() {
         miniPlayerView.alpha = 0
     }
+    
+    func showMainPlayer() {
+        mainStackView.alpha = 1
+    }
+    
+    func hideMainPlayer() {
+        mainStackView.alpha = 0
+    }
 }
 
 // MARK: - Setup View
@@ -138,6 +146,7 @@ extension TrackDetailsView {
     private func addGestures() {
         miniPlayerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapMaximized)))
         miniPlayerView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan)))
+        addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handleDismissalPan)))
     }
     
     private func addButtonsTargets() {
@@ -166,9 +175,9 @@ extension TrackDetailsView {
             initialCenter = self.center
             break
         case .changed:
-            handlePanChanged(gesture: gesture)
+            handleMiniPlayerPanChanged(gesture: gesture)
         case .ended:
-            handlePanEnded(gesture: gesture)
+            handleMiniPlayerPanEnded(gesture: gesture)
             break
         case .possible:
             break
@@ -181,8 +190,29 @@ extension TrackDetailsView {
         }
     }
     
-    private func handlePanChanged(gesture: UIPanGestureRecognizer) {
+    @objc private func handleDismissalPan(gesture: UIPanGestureRecognizer) {
+        switch gesture.state {
+        case .possible:
+            break
+        case .began:
+            initialCenter = self.center
+        case .changed:
+            handleMainPlayerPanChanged(gesture: gesture)
+        case .ended:
+            handleMainPlayerPanEnded(gesture: gesture)
+        case .cancelled:
+            break
+        case .failed:
+            break
+        @unknown default:
+            break
+        }
+    }
+    
+    private func handleMiniPlayerPanChanged(gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: self)
+        guard translation.y < 0 else { return }
+        
         let newAlpha = 1 + translation.y / frame.height
         self.miniPlayerView.alpha = newAlpha < 0 ? 0 : newAlpha
         self.mainStackView.alpha = -translation.y / frame.height
@@ -191,7 +221,7 @@ extension TrackDetailsView {
         self.center = newCenter
     }
     
-    private func handlePanEnded(gesture: UIPanGestureRecognizer) {
+    private func handleMiniPlayerPanEnded(gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: self)
         let velocity = gesture.velocity(in: self)
 
@@ -204,9 +234,42 @@ extension TrackDetailsView {
                 self.center = self.initialCenter
                 if translation.y < -200 || velocity.y < -500 {
                     self.tabBarDelegate?.maximizeTrackDetailsView(viewModel: nil)
-                    self.mainStackView.alpha = 1
+                    self.showMainPlayer()
                 } else {
-                    self.miniPlayerView.alpha = 1
+                    self.showMiniPlayer()
+                }
+            }
+    }
+    
+    private func handleMainPlayerPanChanged(gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translation(in: self)
+        guard translation.y > 0 else { return }
+        
+        let newAlpha = 1 - translation.y / frame.height
+        self.mainStackView.alpha = newAlpha < 0 ? 0 : newAlpha
+        self.miniPlayerView.alpha = translation.y / frame.height
+        
+        let newCenter = CGPoint(x: initialCenter.x, y: initialCenter.y + translation.y)
+        self.center = newCenter
+    }
+    
+    private func handleMainPlayerPanEnded(gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translation(in: self)
+        let velocity = gesture.velocity(in: self)
+
+        UIView.animate(
+            withDuration: 0.5,
+            delay: 0,
+            usingSpringWithDamping: 0.7,
+            initialSpringVelocity: 1,
+            options: .curveEaseOut) {
+                self.center = self.initialCenter
+                if translation.y > 100 || velocity.y > 500 {
+                    self.tabBarDelegate?.minimizeTrackDetailsView()
+                    self.showMainPlayer()
+                } else {
+                    self.hideMiniPlayer()
+                    self.showMainPlayer()
                 }
             }
     }
@@ -304,11 +367,13 @@ extension TrackDetailsView {
             player.play()
             let playImage = UIImage(named: "pause")
             playPauseButton.setImage(playImage, for: .normal)
+            miniPlayerView.setState(playerState: .playing)
             enlargeCoverImageView()
         case .playing:
             player.pause()
             let pauseImage = UIImage(named: "play")
             playPauseButton.setImage(pauseImage, for: .normal)
+            miniPlayerView.setState(playerState: .paused)
             reduceCoverImageView()
         case .waitingToPlayAtSpecifiedRate:
             break

@@ -66,9 +66,11 @@ extension MiniPlayerView {
     func setState(playerState: AVPlayer.TimeControlStatus) {
         switch playerState {
         case .paused:
+            self.playerState = .paused
             let playImage = UIImage(named: "play")
             playPauseButton.setImage(playImage, for: .normal)
         case .playing:
+            self.playerState = .playing
             let pauseImage = UIImage(named: "pause")
             playPauseButton.setImage(pauseImage, for: .normal)
         case .waitingToPlayAtSpecifiedRate:
