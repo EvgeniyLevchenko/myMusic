@@ -12,8 +12,8 @@ import AVKit
 class TrackDetailsView: UIView {
     
     // MARK: - UI Elements
-    
     private let miniPlayerView = MiniPlayerView()
+    private var mainStackView = UIStackView()
     private let dragDownButton = UIButton(
         title: "",
         titleColor: .systemGray,
@@ -71,8 +71,8 @@ class TrackDetailsView: UIView {
     private let volumeSlider = UISlider(value: 1.0)
     private let minVolumeImageView = UIImageView(image: UIImage(named: "iconMin"))
     private let maxVolumImageView = UIImageView(image: UIImage(named: "iconMax"))
-    
-    let player: AVPlayer = {
+
+    private let player: AVPlayer = {
         let avPlayer = AVPlayer()
         avPlayer.automaticallyWaitsToMinimizeStalling = false
         return avPlayer
@@ -80,6 +80,8 @@ class TrackDetailsView: UIView {
     
     weak var delegate: TracksNavigationDelegate?
     weak var tabBarDelegate: MainTabBarControllerDelegate?
+    
+    private var initialCenter = CGPoint()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -93,11 +95,11 @@ class TrackDetailsView: UIView {
     }
     
     func showMiniPlayer() {
-        miniPlayerView.isHidden = false
+        miniPlayerView.alpha = 1
     }
     
     func hideMiniPlayer() {
-        miniPlayerView.isHidden = true
+        miniPlayerView.alpha = 0
     }
 }
 
@@ -114,7 +116,7 @@ extension TrackDetailsView {
     func set(viewModel: SearchViewModel.Cell) {
         transformCoverImageView()
         miniPlayerView.set(viewModel: viewModel)
-        miniPlayerView.setState(playerState: player.timeControlStatus)
+        miniPlayerView.setState(playerState: .playing)
         trackTitleLabel.text = viewModel.trackName
         artistNameLabel.text = viewModel.artistName
         playPauseButton.setImage(UIImage(named: "pause"), for: .normal)
@@ -126,16 +128,16 @@ extension TrackDetailsView {
         coverImageView.sd_setImage(with: url)
     }
     
-    private func addGestures() {
-        miniPlayerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapMaximized)))
-        miniPlayerView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan)))
-    }
-    
     private func playTrack(previewUrl: String?) {
         guard let url = URL(string: previewUrl ?? "") else { return }
         let playerItem = AVPlayerItem(url: url)
         player.replaceCurrentItem(with: playerItem)
         player.play()
+    }
+    
+    private func addGestures() {
+        miniPlayerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapMaximized)))
+        miniPlayerView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan)))
     }
     
     private func addButtonsTargets() {
@@ -161,21 +163,18 @@ extension TrackDetailsView {
     @objc private func handlePan(gesture: UIPanGestureRecognizer) {
         switch gesture.state {
         case .began:
-            print("began")
+            initialCenter = self.center
             break
         case .changed:
             handlePanChanged(gesture: gesture)
         case .ended:
-            print("ended")
+            handlePanEnded(gesture: gesture)
             break
         case .possible:
-            print("possible")
             break
         case .cancelled:
-            print("cancelled")
             break
         case .failed:
-            print("failed")
             break
         @unknown default:
             break
@@ -183,7 +182,33 @@ extension TrackDetailsView {
     }
     
     private func handlePanChanged(gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translation(in: self)
+        let newAlpha = 1 + translation.y / frame.height
+        self.miniPlayerView.alpha = newAlpha < 0 ? 0 : newAlpha
+        self.mainStackView.alpha = -translation.y / frame.height
+        
+        let newCenter = CGPoint(x: initialCenter.x, y: initialCenter.y + translation.y)
+        self.center = newCenter
+    }
+    
+    private func handlePanEnded(gesture: UIPanGestureRecognizer) {
+        let translation = gesture.translation(in: self)
+        let velocity = gesture.velocity(in: self)
 
+        UIView.animate(
+            withDuration: 0.5,
+            delay: 0,
+            usingSpringWithDamping: 0.7,
+            initialSpringVelocity: 1,
+            options: .curveEaseOut) {
+                self.center = self.initialCenter
+                if translation.y < -200 || velocity.y < -500 {
+                    self.tabBarDelegate?.maximizeTrackDetailsView(viewModel: nil)
+                    self.mainStackView.alpha = 1
+                } else {
+                    self.miniPlayerView.alpha = 1
+                }
+            }
     }
 }
 
@@ -327,7 +352,7 @@ extension TrackDetailsView {
         let controlsStackView = UIStackView(arrangedSubviews: [previousTrackButton, playPauseButton, nextTrackButton], axis: .horizontal, distribution: .fillEqually, alignment: .center)
         let volumeStackView = UIStackView(arrangedSubviews: [minVolumeImageView, volumeSlider, maxVolumImageView], axis: .horizontal, spacing: 10.0)
         
-        let mainStackView = UIStackView(arrangedSubviews: [
+        mainStackView = UIStackView(arrangedSubviews: [
             dragDownButton,
             coverImageView,
             durationStackView,
