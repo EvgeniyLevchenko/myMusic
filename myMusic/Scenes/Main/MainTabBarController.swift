@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 protocol MainTabBarControllerDelegate: AnyObject {
     func minimizeTrackDetailsView()
@@ -14,9 +15,9 @@ protocol MainTabBarControllerDelegate: AnyObject {
 
 class MainTabBarController: UITabBarController {
     
+    let trackDetailView = TrackDetailsView()
     private var viewControllerBuilder: ViewControllerBuilder?
     private var searchViewController: SearchViewController?
-    private let trackDetailView = TrackDetailsView()
     private var minimizedTopAnchorConstraint: NSLayoutConstraint!
     private var maximizedTopAnchorConstraint: NSLayoutConstraint!
     private var bottomAnchorConstraint: NSLayoutConstraint!
@@ -39,7 +40,7 @@ class MainTabBarController: UITabBarController {
     
     private func setupTabBar() {
         tabBar.backgroundColor = .white
-        tabBar.tintColor = UIColor(red: 255.0, green: 0.0, blue: 96.0, alpha: 1.0)
+        tabBar.tintColor = UIColor.red
         tabBar.layer.borderColor = UIColor.systemGray4.cgColor
         tabBar.layer.borderWidth = 1.0
     }
@@ -63,8 +64,12 @@ class MainTabBarController: UITabBarController {
         let searchTitle = "Search"
         let libraryTitle = "Library"
         
-        let libraryViewController = LibraryViewController()
-        
+        var library = Library()
+        library.tabBarDelegate = self
+        let libraryViewController = UIHostingController(rootView: library)
+        libraryViewController.tabBarItem.title = libraryTitle
+        libraryViewController.tabBarItem.image = libraryImage
+         
         viewControllerBuilder = SearchViewControllerBuilder()
         searchViewController = viewControllerBuilder?
             .produceInteractor()
@@ -74,8 +79,8 @@ class MainTabBarController: UITabBarController {
         guard let searchViewController = searchViewController else { return }
     
         self.viewControllers = [
+            libraryViewController,
             generateNavigationController(rootViewController: searchViewController, title: searchTitle, image: searchImage),
-            generateNavigationController(rootViewController: libraryViewController, title: libraryTitle, image: libraryImage)
         ]
     }
     

@@ -41,7 +41,6 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor  = .mainWhite()
-        searchBar(searchController.searchBar, textDidChange: "Свистки и бумажки")
         setupSearchBar()
         configureHierarchy()
         configureDataSource()
@@ -119,6 +118,9 @@ extension SearchViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let items = dataSource.snapshot().itemIdentifiers(inSection: .main)
         tabBarDelegate?.maximizeTrackDetailsView(viewModel: items[indexPath.row])
+        let keyWindow = UIApplication.shared.getKeyWindow()
+        let mainTabBarViewContoller = keyWindow?.rootViewController as? MainTabBarController
+        mainTabBarViewContoller?.trackDetailView.delegate = self
         raiseCollectionView()
         lastSelectedCellIndexPath = indexPath
         collectionView.deselectItem(at: indexPath, animated: true)
