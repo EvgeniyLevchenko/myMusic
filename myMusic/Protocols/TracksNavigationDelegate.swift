@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol TracksNavigationDelegate: AnyObject {
+protocol TracksNavigationDelegate {
     func moveToPreviousTrack() -> SearchViewModel.Cell?
     func moveToNextTrack() -> SearchViewModel.Cell?
 }

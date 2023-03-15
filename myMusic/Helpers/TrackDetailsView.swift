@@ -78,7 +78,7 @@ class TrackDetailsView: UIView {
         return avPlayer
     }()
     
-    weak var delegate: TracksNavigationDelegate?
+    var delegate: TracksNavigationDelegate?
     weak var tabBarDelegate: MainTabBarControllerDelegate?
     
     private var initialCenter = CGPoint()
