@@ -411,6 +411,8 @@ extension TrackDetailsView {
             miniPlayerView.heightAnchor.constraint(equalToConstant: 64.0)
         ])
         
+        previousTrackButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        
         let timeStackView = UIStackView(arrangedSubviews: [currentTimeLabel, durationLabel], axis: .horizontal, distribution: .fillEqually)
         let durationStackView = UIStackView(arrangedSubviews: [currentTimeSlider, timeStackView], axis: .vertical)
         let infoStackView = UIStackView(arrangedSubviews: [trackTitleLabel, artistNameLabel], axis: .vertical, alignment: .center)

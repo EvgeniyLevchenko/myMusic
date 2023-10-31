@@ -61,11 +61,11 @@ class SearchViewController: UIViewController {
         view.addSubview(collectionView)
         collectionView.delegate = self
     }
-    
 }
 
 // MARK: Display Logic
 extension SearchViewController: SearchDisplayLogic {
+    
     func displayData(viewModel: Search.Model.ViewModel.ViewModelData) {
         switch viewModel {
         case .some:
@@ -128,6 +128,7 @@ extension SearchViewController: UICollectionViewDelegate {
 }
 
 // MARK: - Search Bar Delegate
+
 extension SearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         timer?.invalidate()
@@ -138,6 +139,7 @@ extension SearchViewController: UISearchBarDelegate {
 }
 
 // MARK: - Tracks Navigation Delegate
+
 extension SearchViewController: TracksNavigationDelegate {
     private func getTrack(isForwardTrack: Bool) -> SearchViewModel.Cell? {
         guard let indexPath = lastSelectedCellIndexPath else { return nil }
