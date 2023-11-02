@@ -131,7 +131,7 @@ struct LibraryCell: View {
                 ProgressView()
             }
             .frame(width: 60, height: 60)
-            .cornerRadius(2)
+            .cornerRadius(5)
             VStack(alignment: .leading) {
                 Text("\(cell.trackName)")
                 Text("\(cell.artistName)")
