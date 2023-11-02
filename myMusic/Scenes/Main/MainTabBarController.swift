@@ -9,6 +9,7 @@ import UIKit
 import SwiftUI
 
 protocol MainTabBarControllerDelegate: AnyObject {
+    
     func minimizeTrackDetailsView()
     func maximizeTrackDetailsView(viewModel: SearchViewModel.Cell?)
 }
@@ -16,7 +17,6 @@ protocol MainTabBarControllerDelegate: AnyObject {
 class MainTabBarController: UITabBarController {
     
     let trackDetailView = TrackDetailsView()
-    private var viewControllerBuilder: ViewControllerBuilder?
     private var searchViewController: SearchViewController?
     private var minimizedTopAnchorConstraint: NSLayoutConstraint!
     private var maximizedTopAnchorConstraint: NSLayoutConstraint!
@@ -69,15 +69,8 @@ class MainTabBarController: UITabBarController {
         let libraryViewController = UIHostingController(rootView: library)
         libraryViewController.tabBarItem.title = libraryTitle
         libraryViewController.tabBarItem.image = libraryImage
-         
-        viewControllerBuilder = SearchViewControllerBuilder()
-        searchViewController = viewControllerBuilder?
-            .produceInteractor()
-            .producePresenter()
-            .produceRouter()
-            .build() as? SearchViewController
-        guard let searchViewController = searchViewController else { return }
-    
+        
+        let searchViewController = SearchViewControllerAssembly(delegate: self).toPresent()
         self.viewControllers = [
             libraryViewController,
             generateNavigationController(rootViewController: searchViewController, title: searchTitle, image: searchImage),
@@ -93,8 +86,6 @@ class MainTabBarController: UITabBarController {
         maximizedTopAnchorConstraint = trackDetailView.topAnchor.constraint(equalTo: view.topAnchor, constant: view.frame.height)
         minimizedTopAnchorConstraint = trackDetailView.topAnchor.constraint(equalTo: tabBar.topAnchor, constant: -64)
         bottomAnchorConstraint = trackDetailView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: view.frame.height)
-        
-        
         
         NSLayoutConstraint.activate([
             bottomAnchorConstraint,

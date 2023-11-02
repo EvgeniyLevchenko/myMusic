@@ -10,23 +10,32 @@ import AVKit
 
 class MiniPlayerView: UIView {
     
-    // MARK: UI Elements
+    // MARK: - Properties
     
+    weak var delegate: MiniPlayerDelegate?
+    
+    // MARK: - Private properties
+    
+    private var playerState = AVPlayer.TimeControlStatus.paused
     private let borderView = UIView()
+    
     private let coverImageView = UIImageView(
         image: UIImage(systemName: "music.note"),
         cornerRadius: 5.0,
         isShadow: true)
+    
     private let trackNameLabel = UILabel(
         text: "Track Title",
         font: .systemFont(ofSize: 17, weight: .medium)
     )
+    
     private let playPauseButton = UIButton(
         title: "",
         image: UIImage(named: "pause"),
         tintColor: .darkText,
         backgroundColor: .mainWhite()
     )
+    
     private let nextTrackButton = UIButton(
         title: "",
         image: UIImage(named: "right"),
@@ -34,9 +43,7 @@ class MiniPlayerView: UIView {
         backgroundColor: .mainWhite()
     )
     
-    private var playerState = AVPlayer.TimeControlStatus.paused
-    
-    weak var delegate: MiniPlayerDelegate?
+    // MARK: - Init
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -47,14 +54,8 @@ class MiniPlayerView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-}
-
-// MARK: - Setup View
-extension MiniPlayerView {
-    private func setupView() {
-        setupBorderView()
-        addButtonsTargets()
-    }
+    
+    // MARK: - Methods
     
     func set(viewModel: SearchViewModel.Cell) {
         trackNameLabel.text = viewModel.trackName
@@ -80,6 +81,13 @@ extension MiniPlayerView {
         }
     }
     
+    // MARK: - Private methods
+    
+    private func setupView() {
+        setupBorderView()
+        addButtonsTargets()
+    }
+    
     private func setupBorderView() {
         borderView.backgroundColor = .systemGray5
     }
@@ -88,10 +96,7 @@ extension MiniPlayerView {
         playPauseButton.addTarget(self, action: #selector(playPauseAction), for: .touchUpInside)
         nextTrackButton.addTarget(self, action: #selector(playNextTrack), for: .touchUpInside)
     }
-}
-
-// MARK: - Controls Actions
-extension MiniPlayerView {
+    
     @objc private func playPauseAction() {
         switch playerState {
         case .paused:
@@ -113,10 +118,7 @@ extension MiniPlayerView {
         setState(playerState: playerState)
         delegate?.nextTrack()
     }
-}
-
-// MARK: Setup Layout
-extension MiniPlayerView {
+    
     private func setupLayout() {
         let stackView = UIStackView(arrangedSubviews: [coverImageView, trackNameLabel, playPauseButton, nextTrackButton], axis: .horizontal, spacing: 16)
         stackView.translatesAutoresizingMaskIntoConstraints = false

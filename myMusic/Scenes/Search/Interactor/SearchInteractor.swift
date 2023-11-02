@@ -9,20 +9,26 @@
 import UIKit
 
 protocol SearchBusinessLogic {
+    
     func makeRequest(request: Search.Model.Request.RequestType)
 }
 
 class SearchInteractor: SearchBusinessLogic {
     
-    var networkServise = NetworkService.shared
-    var presenter: SearchPresentationLogic?
-    var service: SearchService?
+    // MARK: - Private properties
     
-    func makeRequest(request: Search.Model.Request.RequestType) {
-        if service == nil {
-            service = SearchService()
-        }
-        
+    private var networkServise: Networking
+    private var presenter: SearchPresentationLogic?
+    
+    // MARK: - Init
+    
+    init(networkService: Networking) {
+        self.networkServise = networkService
+    }
+    
+    // MARK: - Methods
+    
+    func makeRequest(request: Search.Model.Request.RequestType) {        
         switch request {
         case .some:
             presenter?.presentData(response: .some)
@@ -38,4 +44,9 @@ class SearchInteractor: SearchBusinessLogic {
         }
     }
     
+    // MARK: - Injection
+    
+    func set(presenter: SearchPresentationLogic) {
+        self.presenter = presenter
+    }
 }

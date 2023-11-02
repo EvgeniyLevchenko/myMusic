@@ -8,6 +8,7 @@
 import Foundation
 
 protocol MiniPlayerDelegate: AnyObject {
+    
     func playPauseTrack()
     func nextTrack()
 }

@@ -95,6 +95,7 @@ struct Library: View {
     }
     
     // MARK: Tracks Deletion
+    
     private func delete(at offsets: IndexSet) {
         tracks.remove(atOffsets: offsets)
         UserDefaults.standard.save(objects: tracks, forKey: CodingKey.tracks.rawValue) { error in
@@ -117,6 +118,7 @@ struct Library: View {
 }
 
 // MARK: Library Track Cell
+
 struct LibraryCell: View {
     
     var cell: SearchViewModel.Cell
@@ -139,7 +141,9 @@ struct LibraryCell: View {
 }
 
 // MARK: - Tracks Navigation Delegate
+
 extension Library: TracksNavigationDelegate {
+    
     private func getTrack(isForwardTrack: Bool) -> SearchViewModel.Cell? {
         guard let index = lastSelectedTrackIndex else { return nil }
         var nextIndex: Int
@@ -151,7 +155,7 @@ extension Library: TracksNavigationDelegate {
             }
         case false:
             nextIndex = index - 1
-            if nextIndex == 0 {
+            if nextIndex < 0 {
                 nextIndex = tracks.count - 1
             }
         }

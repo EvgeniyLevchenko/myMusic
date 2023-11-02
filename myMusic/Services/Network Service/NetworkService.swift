@@ -51,33 +51,4 @@ class NetworkService: Networking {
             completion(response.result)
         }
     }
-    
-    
-//    func fetchTracks(searchText: String) {
-//        let url = "https://itunes.apple.com/search"
-//        
-//        let parameters = [
-//            "term" : "\(searchText)",
-//            "limit" : ""
-//        ]
-//        AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: nil, interceptor: nil, requestModifier: nil).response { response in
-//                if let error = response.error {
-//                    print("error: \(error.localizedDescription)")
-//                    return
-//                }
-//
-//                guard let data = response.data else { return }
-//
-//                let decoder = JSONDecoder()
-//                do {
-//                    let objects = try decoder.decode(SearchRespone.self, from: data)
-//                    self.tracks = objects.results
-//                    DispatchQueue.main.async {
-//                        self.reloadDataSource(with: self.tracks)
-//                    }
-//                } catch {
-//                    print("JSON error: \(error)")
-//                }
-//        }
-//    }
 }

@@ -11,77 +11,90 @@ import AVKit
 
 class TrackDetailsView: UIView {
     
-    // MARK: - UI Elements
-    private let miniPlayerView = MiniPlayerView()
-    private var mainStackView = UIStackView()
-    private let dragDownButton = UIButton(
+    // MARK: - Properties
+    
+    var delegate: TracksNavigationDelegate?
+    weak var tabBarDelegate: MainTabBarControllerDelegate?
+    
+    // MARK: - Private properties
+    
+    private lazy var miniPlayerView = MiniPlayerView()
+    private lazy var mainStackView = UIStackView()
+    private lazy var currentTimeSlider = UISlider(value: 0.0)
+    private lazy var volumeSlider = UISlider(value: 1.0)
+    private lazy var minVolumeImageView = UIImageView(image: UIImage(named: "iconMin"))
+    private lazy var maxVolumImageView = UIImageView(image: UIImage(named: "iconMax"))
+    private lazy var initialCenter = CGPoint()
+    
+    private lazy var dragDownButton = UIButton(
         title: "",
         titleColor: .systemGray,
         image: UIImage(named: "dragDown"),
         tintColor: .systemGray,
         backgroundColor: .mainWhite()
     )
-    private let coverImageView = UIImageView(
+    
+    private lazy var coverImageView = UIImageView(
         image: UIImage(systemName: "music.note"),
         cornerRadius: 5.0,
         isShadow: true
     )
-    private let currentTimeSlider = UISlider(value: 0.0)
-    private let currentTimeLabel = UILabel(
+    
+    private lazy var currentTimeLabel = UILabel(
         text: "00:00",
         font: .systemFont(ofSize: 15),
         textColor: .systemGray,
         textAlignment: .left
     )
-    private let durationLabel = UILabel(
+    
+    private lazy var durationLabel = UILabel(
         text: "--:--",
         font: .systemFont(ofSize: 15),
         textColor: .systemGray,
         textAlignment: .right
     )
-    private let trackTitleLabel = UILabel(
+    
+    private lazy var trackTitleLabel = UILabel(
         text: "Track title",
         font: .systemFont(ofSize: 24.0, weight: .semibold),
         textAlignment: .center
     )
-    private let artistNameLabel = UILabel(
+    
+    private lazy var artistNameLabel = UILabel(
         text: "Author",
         font: .systemFont(ofSize: 24.0, weight: .light),
         textColor: .systemRed,
         textAlignment: .center
     )
-    private let previousTrackButton = UIButton(
+    
+    private lazy var previousTrackButton = UIButton(
         title: "",
         image: UIImage(named: "left"),
         tintColor: .darkText,
         backgroundColor: .mainWhite()
     )
-    private let playPauseButton = UIButton(
+    
+    private lazy var playPauseButton = UIButton(
         title: "",
         image: UIImage(named: "pause"),
         tintColor: .darkText,
         backgroundColor: .mainWhite()
     )
-    private let nextTrackButton = UIButton(
+    
+    private lazy var nextTrackButton = UIButton(
         title: "",
         image: UIImage(named: "right"),
         tintColor: .darkText,
         backgroundColor: .mainWhite()
     )
-    private let volumeSlider = UISlider(value: 1.0)
-    private let minVolumeImageView = UIImageView(image: UIImage(named: "iconMin"))
-    private let maxVolumImageView = UIImageView(image: UIImage(named: "iconMax"))
 
-    private let player: AVPlayer = {
+    private lazy var player: AVPlayer = {
         let avPlayer = AVPlayer()
         avPlayer.automaticallyWaitsToMinimizeStalling = false
         return avPlayer
     }()
     
-    var delegate: TracksNavigationDelegate?
-    weak var tabBarDelegate: MainTabBarControllerDelegate?
-    
-    private var initialCenter = CGPoint()
+    // MARK: - Init
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -93,6 +106,8 @@ class TrackDetailsView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Methods
     
     func showMiniPlayer() {
         miniPlayerView.alpha = 1
@@ -112,7 +127,9 @@ class TrackDetailsView: UIView {
 }
 
 // MARK: - Setup View
+
 extension TrackDetailsView {
+    
     private func setupView() {
         addButtonsTargets()
         transformCoverImageView()
@@ -164,7 +181,9 @@ extension TrackDetailsView {
 }
 
 // MARK: - Gestures
+
 extension TrackDetailsView {
+    
     @objc private func handleTapMaximized() {
         tabBarDelegate?.maximizeTrackDetailsView(viewModel: nil)
     }
@@ -276,7 +295,9 @@ extension TrackDetailsView {
 }
 
 // MARK: - Time Setup
+
 extension TrackDetailsView {
+    
     private func monitorStartTime() {
         let time = CMTimeMake(value: 1, timescale: 3)
         let times = [NSValue(time: time)]
@@ -336,7 +357,9 @@ extension TrackDetailsView {
 }
 
 // MARK: - Controls actions
+
 extension TrackDetailsView {
+    
     @objc private func handleCurrentTimeSlider() {
         let percentage = currentTimeSlider.value
         guard let duration = player.currentItem?.duration else { return }
@@ -388,7 +411,9 @@ extension TrackDetailsView {
 }
 
 // MARK: - Mini Player Delegate
+
 extension TrackDetailsView: MiniPlayerDelegate {
+    
     func playPauseTrack() {
         playPauseAction()
     }
@@ -399,7 +424,9 @@ extension TrackDetailsView: MiniPlayerDelegate {
 }
 
 // MARK: - Setup Layout
+
 extension TrackDetailsView {
+    
     private func setupLayout() {
         
         miniPlayerView.translatesAutoresizingMaskIntoConstraints = false

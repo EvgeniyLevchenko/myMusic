@@ -8,6 +8,7 @@
 import Foundation
 
 protocol TracksNavigationDelegate {
+    
     func moveToPreviousTrack() -> SearchViewModel.Cell?
     func moveToNextTrack() -> SearchViewModel.Cell?
 }

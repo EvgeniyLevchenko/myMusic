@@ -9,12 +9,17 @@
 import UIKit
 
 protocol SearchPresentationLogic {
+    
     func presentData(response: Search.Model.Response.ResponseType)
 }
 
 class SearchPresenter: SearchPresentationLogic {
     
-    weak var viewController: SearchDisplayLogic?
+    // MARK: - Private properties
+    
+    private weak var viewController: SearchDisplayLogic?
+    
+    // MARK: - Methods
     
     func presentData(response: Search.Model.Response.ResponseType) {
         switch response {
@@ -32,6 +37,8 @@ class SearchPresenter: SearchPresentationLogic {
         }
     }
     
+    // MARK: - Private methods
+    
     private func cellViewModel(from track: Track) -> SearchViewModel.Cell {
         return SearchViewModel.Cell.init(
             iconUrlString: track.artworkUrl100,
@@ -40,5 +47,11 @@ class SearchPresenter: SearchPresentationLogic {
             artistName: track.artistName,
             previewUrl: track.previewUrl
         )
+    }
+    
+    // MARK: - Injection
+    
+    func set(viewController: SearchDisplayLogic) {
+        self.viewController = viewController
     }
 }
